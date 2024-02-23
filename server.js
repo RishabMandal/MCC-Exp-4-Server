@@ -63,6 +63,31 @@ app.post("/saveFormData", async (req, res) => {
   }
 });
 
+app.get("/getFormData", async (req, res) => {
+  try {
+    await mongoose
+      .connect(
+        "mongodb+srv://Rishab829:Kanchan%401@expresstry.wqhmyb0.mongodb.net/formdata",
+        {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        }
+      )
+      .then(() => {
+        console.log("Connected to MongoDB successfully");
+      })
+      .catch((err) => {
+        console.error("Error connecting to MongoDB:", err);
+      });
+    // Retrieve all form data from the database
+    const allFormData = await FormData.find();
+    res.json(allFormData); // Send the data as JSON response
+  } catch (err) {
+    console.error("Error fetching form data:", err);
+    res.status(500).send("Error fetching form data");
+  }
+});
+
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });

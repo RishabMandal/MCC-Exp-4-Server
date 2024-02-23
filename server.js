@@ -42,6 +42,8 @@ app.post("/saveFormData", async (req, res) => {
         console.error("Error connecting to MongoDB:", err);
       });
 
+    let db = mongoose.connection;
+
     // Define schema for form data
     const formDataSchema = new mongoose.Schema({
       name: String,
@@ -54,9 +56,12 @@ app.post("/saveFormData", async (req, res) => {
     const FormData = mongoose.model("FormData", formDataSchema);
     const formData = req.body;
     // Create a new document using the FormData model
-    const savedFormData = await FormData.create(formData);
-    console.log("Form data saved successfully:", savedFormData);
+    const result = await db.collection("formData").insertOne(formData);
+    console.log("Form data saved successfully:", result.insertedId);
     res.send("Form data saved successfully");
+    // const savedFormData = await FormData.create(formData);
+    // console.log("Form data saved successfully:", savedFormData);
+    // res.send("Form data saved successfully");
   } catch (err) {
     console.error("Error saving form data:", err);
     res.status(500).send("Error saving form data");
@@ -80,26 +85,13 @@ app.get("/getFormData", async (req, res) => {
         console.error("Error connecting to MongoDB:", err);
       });
 
-    // Define schema for form data
-    const formDataSchema = new mongoose.Schema({
-      name: String,
-      email: String,
-      genderId: Number,
-      agreeToTerms: Boolean,
-    });
-
-    // Define model for form data
-    const FormData = mongoose.model("FormData", formDataSchema);
-
-    // Retrieve all form data from the database
-    // const allFormData = await FormData.find();
-    const collection = db.collection('formData');
-    const allFormData = await collection.find().toArray();
+    let db = mongoose.connection;
+    const allFormData = await db.collection("formData").find().toArray();
     // res.json(allFormData);
     res.json(allFormData); // Send the data as JSON response
   } catch (err) {
     console.error("Error fetching form data:", err);
-    res.status(500).send("Error fetching form data");
+    res.status(500).send("Error fetching form data: ", err);
   }
 });
 

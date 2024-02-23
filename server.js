@@ -79,6 +79,18 @@ app.get("/getFormData", async (req, res) => {
       .catch((err) => {
         console.error("Error connecting to MongoDB:", err);
       });
+
+    // Define schema for form data
+    const formDataSchema = new mongoose.Schema({
+      name: String,
+      email: String,
+      genderId: Number,
+      agreeToTerms: Boolean,
+    });
+
+    // Define model for form data
+    const FormData = mongoose.model("FormData", formDataSchema);
+
     // Retrieve all form data from the database
     const allFormData = await FormData.find();
     res.json(allFormData); // Send the data as JSON response

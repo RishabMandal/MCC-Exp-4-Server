@@ -3,9 +3,23 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const app = express();
-const port = 3001; // or any other port you prefer
+const port = process.env.PORT || 3001; // or any other port you prefer
 
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:3000",
+//       "http://localhost:5000",
+//       "https://myecommerce-seven.vercel.app",
+//     ],
+//     methods: ["GET", "HEAD", "POST"],
+//     credentials: true,
+//   })
+// );
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Connect to MongoDB using Mongoose
 // mongoose.connect('mongodb://localhost:27017/formdata', {

@@ -92,7 +92,10 @@ app.get("/getFormData", async (req, res) => {
     const FormData = mongoose.model("FormData", formDataSchema);
 
     // Retrieve all form data from the database
-    const allFormData = await FormData.find();
+    // const allFormData = await FormData.find();
+    const collection = db.collection('formData');
+    const allFormData = await collection.find().toArray();
+    // res.json(allFormData);
     res.json(allFormData); // Send the data as JSON response
   } catch (err) {
     console.error("Error fetching form data:", err);
